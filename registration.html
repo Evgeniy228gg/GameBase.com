@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація</title>
+    <link rel="stylesheet" href="style.profile.css">
+</head>
+<body>
+
+<!-- Форма реєстрації -->
+<div class="container" id="registrationContainer">
+    <h2>Реєстрація</h2>
+    <input type="text" id="registerUsername" placeholder="Нік" required>
+    <input type="password" id="registerPassword" placeholder="Пароль" required>
+    <input type="text" id="registerAvatar" placeholder="URL аватара" required>
+    <input type="text" id="registerFriends" placeholder="Друзі (через кому)" required>
+    <input type="text" id="registerGroups" placeholder="Групи (через кому)" required>
+    <button onclick="registerUser()">Зареєструватися</button>
+</div>
+
+<script>
+    // Функція для реєстрації користувача
+    function registerUser() {
+        var username = document.getElementById('registerUsername').value;
+        var password = document.getElementById('registerPassword').value;
+        var avatar = document.getElementById('registerAvatar').value;
+        var friends = document.getElementById('registerFriends').value.split(',').map(friend => friend.trim());
+        var groups = document.getElementById('registerGroups').value.split(',').map(group => group.trim());
+
+        if (username && password) {
+            // Зберігаємо дані користувача в localStorage
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            localStorage.setItem('avatar', avatar);
+            localStorage.setItem('friends', JSON.stringify(friends));
+            localStorage.setItem('groups', JSON.stringify(groups));
+
+            // Перехід на сторінку профілю
+            window.location.href = 'profile.html'; // Переходимо на сторінку профілю
+        } else {
+            alert("Будь ласка, введіть коректні дані для реєстрації!");
+        }
+    }
+</script>
+
+</body>
+</html>

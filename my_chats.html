@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мої чати</title>
+    <link rel="stylesheet" href="style.my_chats.css">
+</head>
+<body>
+    <h1>Мої чати</h1>
+
+    <ul id="chatList">
+        <!-- Чаты будут отображаться здесь -->
+    </ul>
+
+    <button onclick="createChat()">Створити новий чат</button>
+    <button onclick="goToMain()">На головну сторінку</button>
+
+    <script>
+        // Функция для загрузки и отображения чатов
+        function loadChats() {
+            const chatList = document.getElementById("chatList");
+            chatList.innerHTML = "";  // Очищаем список перед обновлением
+
+            // Извлекаем данные из localStorage
+            const chats = JSON.parse(localStorage.getItem("chats")) || [];
+
+            // Если чатов нет, отображаем сообщение
+            if (chats.length === 0) {
+                const li = document.createElement("li");
+                li.innerHTML = "<i>Немає чатів. Створіть новий чат.</i>";
+                chatList.appendChild(li);
+                return;
+            }
+
+            // Отображаем чаты в списке
+            chats.forEach(chat => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <a href="chat.html?chatId=${chat.id}">${chat.name}</a>
+                    <button onclick="deleteChat(${chat.id})">Видалити</button>
+                `;
+                chatList.appendChild(li);
+            });
+        }
+
+        // Функция для удаления чата
+        function deleteChat(chatId) {
+            // Удаляем чат из списка чатов
+            let chats = JSON.parse(localStorage.getItem("chats")) || [];
+            chats = chats.filter(chat => chat.id !== chatId);  // Фильтруем чат по chatId
+
+            // Сохраняем обновленный список чатов в localStorage
+            localStorage.setItem("chats", JSON.stringify(chats));
+
+            // Удаляем сообщения этого чата из localStorage
+            let messages = JSON.parse(localStorage.getItem("messages")) || {};
+            delete messages[chatId];  // Удаляем сообщения по chatId
+
+            // Сохраняем обновленные сообщения в localStorage
+            localStorage.setItem("messages", JSON.stringify(messages));
+
+            // Обновляем список чатов на странице
+            loadChats();
+        }
+
+        // Функция для перехода на страницу создания чата
+        function createChat() {
+            window.location.href = "create-a-chat.html";
+        }
+
+        // Функция для перехода на главную страницу
+        function goToMain() {
+            window.location.href = "main.html";  // Переход на главную страницу
+        }
+
+        // Загружаем чаты при загрузке страницы
+        window.onload = loadChats;
+    </script>
+</body>
+</html>

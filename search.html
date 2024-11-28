@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск груп</title>
+    <!-- Подключение внешнего CSS -->
+    <link rel="stylesheet" href="style.search.css">
+</head>
+<body>
+
+    <!-- Форма поиска -->
+    <div class="container">
+        <h1>Поиск груп</h1>
+
+        <input type="text" id="searchInput" placeholder="Поиск по названию группы...">
+        <button onclick="searchGroups()">Найти</button>
+
+        <!-- Результаты поиска -->
+        <div id="resultsContainer" style="display: none;">
+            <h3>Результаты поиска:</h3>
+            <ul id="resultsList"></ul>
+        </div>
+    </div>
+
+    <script>
+        const groups = [
+            { id: 1, name: "Програмування для початківців", description: "Група для вивчення основ програмування." },
+            { id: 2, name: "Мандрівники", description: "Група для любителів подорожей." },
+            { id: 3, name: "Мови програмування", description: "Обговорення різних мов програмування." }
+        ];
+
+        localStorage.setItem('groups', JSON.stringify(groups));
+
+        function searchGroups() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const groups = JSON.parse(localStorage.getItem('groups')) || [];
+
+            const results = groups.filter(group => group.name.toLowerCase().includes(searchTerm));
+
+            displaySearchResults(results);
+        }
+
+        function displaySearchResults(results) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultsList = document.getElementById('resultsList');
+
+            resultsList.innerHTML = '';
+
+            if (results.length > 0) {
+                results.forEach(group => {
+                    const li = document.createElement('li');
+                    li.textContent = group.name + " - " + group.description;
+
+                    const addButton = document.createElement('button');
+                    addButton.textContent = 'Додати чат';
+                    addButton.onclick = () => addChatToUser(group);
+
+                    li.appendChild(addButton);
+                    resultsList.appendChild(li);
+                });
+            } else {
+                resultsList.innerHTML = '<li>Група не знайдена</li>';
+            }
+
+            resultsContainer.style.display = 'block';
+        }
+
+        function addChatToUser(group) {
+            let userChats = JSON.parse(localStorage.getItem('userChats')) || [];
+
+            if (!userChats.find(chat => chat.id === group.id)) {
+                userChats.push(group);
+                localStorage.setItem('userChats', JSON.stringify(userChats));
+                alert("Чат добавлено в ваш список!");
+            } else {
+                alert("Этот чат уже в вашем списке!");
+            }
+        }
+    </script>
+
+    <div style="margin-top: 20px;">
+        <button onclick="goToMain()">На головну сторінку</button>
+    </div>
+
+    <script>
+        function goToMain() {
+            window.location.href = 'main.html';
+        }
+    </script>
+
+</body>
+</html>

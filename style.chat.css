@@ -1,0 +1,135 @@
+/* Общие стили */
+body {
+    background-color: #2C2C2C;
+    font-family: 'Titillium Web', sans-serif;
+    color: #F5F5F5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Контейнер */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    background-color: #3E3E3E;
+}
+
+/* Заголовок страницы */
+h1 {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 30px;
+}
+
+/* Информация о чате */
+#chatInfo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#chatInfo h2 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+#chatInfo p {
+    font-size: 18px;
+    color: #CCCCCC;
+}
+
+/* Область сообщений */
+.chat-messages {
+    max-height: 500px;
+    overflow-y: auto;
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid #F5F5F5;
+    background-color: #323232;
+    border-radius: 8px;
+    margin-top: 20px;
+    color: #F5F5F5;
+}
+
+/* Стили для сообщений */
+.chat-messages .message {
+    background-color: #444;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    word-wrap: break-word;
+}
+
+.chat-messages .message .username {
+    font-weight: 700;
+    color: #9E9E9E;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.chat-messages .message .text {
+    font-size: 18px;
+    color: #F5F5F5;
+}
+
+/* Форма для ввода сообщений */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px;
+    height: 100px;
+    background-color: #2D2D2D;
+    color: white;
+    resize: none;
+}
+
+form button {
+    background-color: #4A7BCC;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+form button:hover {
+    background-color: #4059BF;
+}
+
+/* Кнопка для перехода на главную */
+.home-button {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.home-button button {
+    background-color: #4A7BCC;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.home-button button:hover {
+    background-color: #4059BF;
+}

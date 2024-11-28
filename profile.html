@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профіль користувача</title>
+    <link rel="stylesheet" href="style.profile.css">
+</head>
+<body>
+    <!-- Страница профілю -->
+    <div class="container hidden" id="profileContainer">
+        <h2>Профіль користувача</h2>
+
+        <div id="profileDisplay">
+            <h3>Нік: <span id="profileUsername"></span></h3>
+            <p>Пароль: <span id="profilePassword"></span></p>
+
+            <!-- Раздел "Групи" -->
+            <h3>Групи:</h3>
+            <ul class="chats-list" id="chatsList"></ul> <!-- Список чатов -->
+
+            <button onclick="editProfile()">Редагувати профіль</button>
+            <button onclick="logout()">Вийти</button>
+            <button onclick="goToMain()">На головну сторінку</button> <!-- Кнопка для перехода на главную -->
+        </div>
+
+        <div id="profileEdit" class="hidden">
+            <h3>Редагувати профіль</h3>
+            <input type="text" id="editUsername" placeholder="Нік" required>
+            <input type="password" id="editPassword" placeholder="Пароль" required>
+            <input type="text" id="editFriends" placeholder="Друзі (через кому)" required>
+            <input type="text" id="editGroups" placeholder="Групи (через кому)" required>
+            <button onclick="saveProfile()">Зберегти зміни</button>
+            <button onclick="cancelEdit()">Скасувати</button>
+        </div>
+    </div>
+
+    <script>
+        // Функция для отображения профиля
+        function showProfile() {
+            document.getElementById('profileContainer').classList.remove('hidden');
+            var username = localStorage.getItem('username');
+            var password = localStorage.getItem('password');
+            var chats = JSON.parse(localStorage.getItem('chats')) || []; // Получаем чаты из localStorage
+
+            // Отображаем данные профиля
+            document.getElementById('profileUsername').textContent = username;
+            document.getElementById('profilePassword').textContent = password;
+
+            // Отображаем чаты в разделе "Групи"
+            var chatsList = document.getElementById('chatsList');
+            chatsList.innerHTML = ''; // Очищаем список
+
+            // Если чатов нет, отображаем сообщение
+            if (chats.length === 0) {
+                const li = document.createElement("li");
+                li.innerHTML = "<i>Немає груп. Створіть нову групу.</i>";
+                chatsList.appendChild(li);
+            } else {
+                // Отображаем чаты в списке
+                chats.forEach(function(chat) {
+                    var li = document.createElement("li");
+                    li.innerHTML = `<a href="chat.html?chatId=${chat.id}">${chat.name}</a> - ${chat.description}`;
+                    chatsList.appendChild(li);
+                });
+            }
+        }
+
+        // Функция для редактирования профиля
+        function editProfile() {
+            document.getElementById('profileDisplay').classList.add('hidden');
+            document.getElementById('profileEdit').classList.remove('hidden');
+
+            // Заполняем поля редактирования данными из localStorage
+            document.getElementById('editUsername').value = localStorage.getItem('username');
+            document.getElementById('editPassword').value = localStorage.getItem('password');
+            document.getElementById('editFriends').value = localStorage.getItem('friends');
+            document.getElementById('editGroups').value = localStorage.getItem('groups');
+        }
+
+        // Функция для сохранения изменений в профиле
+        function saveProfile() {
+            const username = document.getElementById('editUsername').value;
+            const password = document.getElementById('editPassword').value;
+            const friends = document.getElementById('editFriends').value;
+            const groups = document.getElementById('editGroups').value;
+
+            // Сохраняем данные профиля в localStorage
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            localStorage.setItem('friends', friends);
+            localStorage.setItem('groups', groups);
+
+            // Переходим на страницу профиля после сохранения изменений
+            window.location.href = "profile.html"; // Перенаправляем на профиль после сохранения изменений
+        }
+
+        // Функция для отмены редактирования профиля
+        function cancelEdit() {
+            showProfile();
+        }
+
+        // Функция для выхода из профиля (удаляем данные из localStorage)
+        function logout() {
+            localStorage.removeItem('username');
+            localStorage.removeItem('password');
+            localStorage.removeItem('friends');
+            localStorage.removeItem('groups');
+            window.location.href = "index.html"; // Переход на страницу входа
+        }
+
+        // Функция для перехода на главную страницу
+        function goToMain() {
+            window.location.href = "main.html"; // Переход на страницу main.html
+        }
+
+        // Загружаем профиль при загрузке страницы
+        window.onload = showProfile;
+    </script>
+</body>
+</html>

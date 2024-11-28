@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Створити новий чат</title>
+        <link rel="stylesheet" href="style.create-a-chat.css">
+</head>
+<body>
+    <h1>Створити новий чат</h1>
+
+    <form id="createChatForm">
+        <input type="text" id="chatName" placeholder="Ім'я чату" required>
+        <textarea id="chatDescription" placeholder="Опис чату" required></textarea>
+        <button type="submit">Створити чат</button>
+    </form>
+
+    <script>
+        document.getElementById("createChatForm").addEventListener("submit", function(e) {
+            e.preventDefault();  // Предотвращаем стандартное действие формы
+
+            const chatName = document.getElementById("chatName").value;
+            const chatDescription = document.getElementById("chatDescription").value;
+
+            if (chatName && chatDescription) {
+                // Генерация ID для нового чата
+                const chatId = Date.now();
+
+                // Получаем текущие чаты из localStorage
+                let chats = JSON.parse(localStorage.getItem("chats")) || [];
+
+                // Добавляем новый чат в список
+                chats.push({
+                    id: chatId,
+                    name: chatName,
+                    description: chatDescription,
+                    messages: []  // Изначально чат пустой
+                });
+
+                // Сохраняем обновленный список чатов в localStorage
+                localStorage.setItem("chats", JSON.stringify(chats));
+
+                // Перенаправляем пользователя на страницу чатов
+                window.location.href = "my_chats.html";
+            } else {
+                alert("Заповніть всі поля!");
+            }
+        });
+    </script>
+</body>
+</html>

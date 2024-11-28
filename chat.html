@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат</title>
+    <link rel="stylesheet" href="style.chat.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Чат</h1>
+
+        <!-- Информация о чате -->
+        <div id="chatInfo">
+            <h2 id="chatName"></h2>
+            <p id="chatDescription"></p>
+        </div>
+
+        <!-- Область сообщений -->
+        <div id="chatMessages" class="chat-messages"></div>
+
+        <!-- Форма для отправки сообщений -->
+        <form id="messageForm">
+            <textarea id="messageText" placeholder="Написати повідомлення..." required></textarea>
+            <button type="submit">Відправити</button>
+        </form>
+
+        <!-- Кнопка для перехода на страницу чатов -->
+        <div class="home-button">
+            <button onclick="goToChats()">На головну</button>
+        </div>
+    </div>
+
+    <script>
+        // Функция для перехода на страницу чатов
+        function goToChats() {
+            window.location.href = "my_chats.html"; // Переход на страницу чатов
+        }
+
+        // Загрузка чата и сообщений
+        window.onload = function() {
+            const chatId = new URLSearchParams(window.location.search).get("chatId");
+            const chats = JSON.parse(localStorage.getItem("chats")) || [];
+            const chat = chats.find(c => c.id == chatId);
+
+            if (chat) {
+                // Отображаем информацию о чате
+                document.getElementById("chatName").textContent = chat.name;
+                document.getElementById("chatDescription").textContent = chat.description;
+
+                // Отображаем сообщения
+                const chatMessagesDiv = document.getElementById("chatMessages");
+                chatMessagesDiv.innerHTML = ""; // Очищаем текущие сообщения
+
+                chat.messages.forEach(message => {
+                    const messageElement = document.createElement("div");
+                    messageElement.classList.add("message");
+                    messageElement.innerHTML = `
+                        <div class="username">${message.username}</div>
+                        <div class="text">${message.text}</div>
+                    `;
+                    chatMessagesDiv.appendChild(messageElement);
+                });
+            } else {
+                alert("Чат не знайдений!");
+            }
+        };
+
+        // Обработчик отправки сообщения
+        document.getElementById("messageForm").addEventListener("submit", function(e) {
+            e.preventDefault(); // Предотвращаем отправку формы
+
+            const messageText = document.getElementById("messageText").value;
+            const chatId = new URLSearchParams(window.location.search).get("chatId");
+            const username = localStorage.getItem("username");
+
+            if (messageText) {
+                const chats = JSON.parse(localStorage.getItem("chats")) || [];
+                const chat = chats.find(c => c.id == chatId);
+
+                if (chat) {
+                    // Добавляем новое сообщение
+                    chat.messages.push({
+                        username: username,
+                        text: messageText
+                    });
+
+                    // Обновляем чаты в localStorage
+                    localStorage.setItem("chats", JSON.stringify(chats));
+
+                    // Добавляем сообщение на экран
+                    const messageElement = document.createElement("div");
+                    messageElement.classList.add("message");
+                    messageElement.innerHTML = `
+                        <div class="username">${username}</div>
+                        <div class="text">${messageText}</div>
+                    `;
+                    document.getElementById("chatMessages").appendChild(messageElement);
+
+                    // Очищаем поле ввода
+                    document.getElementById("messageText").value = "";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
